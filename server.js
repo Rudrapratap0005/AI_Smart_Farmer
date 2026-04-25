@@ -16,13 +16,22 @@ process.on("unhandledRejection", (error) => {
   console.error("Unhandled promise rejection", error);
 });
 
-connectToDatabase()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error("Failed to start server", error);
-    process.exit(1);
-  });
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+async function connectWithRetry() {
+  try {
+    await connectToDatabase();
+  } catch (error) {
+    console.error("Failed to connect to MongoDB. Retrying in 5 seconds.", error);
+    setTimeout(connectWithRetry, 5000);
+  }
+}
+
+server.on("error", (error) => {
+  console.error("Failed to start HTTP server", error);
+  process.exit(1);
+});
+
+connectWithRetry();
