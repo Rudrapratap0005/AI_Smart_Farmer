@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Smart Farming</title>
+
+  <!-- Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  height: 100vh;
+  color: #fff;
+  background: url("l2.png") no-repeat center center/cover;
+  position: relative;
+}
+
+/* Blur overlay */
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 0;
+}
+
+/* MAIN CONTAINER */
+.container {
+  position: relative;
+  z-index: 1;
+
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 80px;   /* balanced spacing */
+}
+
+/* LEFT SIDE */
+.left {
+  max-width: 500px;
+}
+
+.brand {
+  font-size: 56px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.tagline {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #e0f2f1;
+}
+
+/* RIGHT CARD */
+.card {
+  width: 380px;
+  padding: 40px;
+
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.08);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  text-align: center;
+}
+
+/* HEADINGS */
+.heading {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.subheading {
+  font-size: 18px;
+  margin-bottom: 25px;
+  color: #d0f0d0;
+}
+
+/* BUTTONS */
+.btn {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+
+  border-radius: 30px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* White buttons */
+.white {
+  background: #fff;
+  color: #000;
+}
+
+/* Create */
+.create {
+  background: #0b6623;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Outline */
+.outline {
+  background: transparent;
+  border: 1px solid #aaa;
+  color: #fff;
+}
+
+/* Divider */
+.divider {
+  margin: 15px 0;
+  position: relative;
+  text-align: center;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  height: 1px;
+  width: 40%;
+  background: #aaa;
+  position: absolute;
+  top: 50%;
+}
+
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+.divider span {
+  font-size: 12px;
+  color: #ccc;
+}
+
+/* Terms */
+.terms {
+  font-size: 12px;
+  margin-top: 10px;
+  color: #ccc;
+}
+
+.terms a {
+  color: #90ee90;
+  text-decoration: none;
+}
+
+/* Login text */
+.login-text {
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+  </style>
+
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Left Section -->
+  <div class="left">
+    <h1 class="brand">AI Smart Farming</h1>
+    <p class="tagline">
+      Empowering farmers with AI-driven insights for better yield, smarter decisions, and sustainable agriculture.
+    </p>
+  </div>
+
+  <!-- Right Section -->
+  <div class="card">
+
+    <h1 class="heading">Smart Farming Live</h1>
+    <h2 class="subheading">Join today.</h2>
+
+    <button class="btn google" onclick="googleLogin()">
+  <i class="fa-brands fa-google"></i>
+  Sign up with Google
+</button>
+
+    <button class="btn apple">
+      <i class="fa-brands fa-apple"></i>
+      <a href="SignA.html" style="text-decoration: none; color: black;">Sign up with Apple</a>
+      
+    </button>
+
+    <div class="divider">
+      <span>OR</span>
+    </div>
+
+    <button class="btn create"><a href="CreateAcc.html" style="text-decoration: none;color: white;">Create Account</a></button>
+
+    <p class="terms">
+      By signing up, you agree to the 
+      <a href="TS.html">Terms of Service</a> and 
+      <a href="PP.html">Privacy Policy</a>.
+    </p>
+
+    <h3 class="login-text">Already have an account?</h3>
+
+    <button class="btn outline"><a href="SignIn.html" style="text-decoration: none; color: white;">Sign In</a></button>
+
+  </div>
+
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSy...",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  window.googleLogin = async function () {
+    const provider = new GoogleAuthProvider();
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      alert("Welcome " + user.displayName);
+
+      localStorage.setItem("user", JSON.stringify(user));
+
+      window.location.href = "Dashboard.html";
+
+    } catch (error) {
+      alert("Login Failed");
+      console.log(error);
+    }
+  }
+</script>
+
+</body>
+</html>

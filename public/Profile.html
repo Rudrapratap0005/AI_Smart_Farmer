@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Profile - AI Smart Farming</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(to right, #1b5e20, #66bb6a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .card {
+      width: 350px;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    img {
+      width: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      margin-bottom: 5px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: #e0f2f1;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 25px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .logout {
+      background: #e53935;
+      color: white;
+    }
+
+    .dashboard {
+      background: #0b6623;
+      color: white;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <img id="profilePic" src="" alt="User">
+  <h2 id="name">User Name</h2>
+  <p id="email">user@email.com</p>
+
+  <button class="btn dashboard" onclick="goDashboard()">Go to Dashboard</button>
+  <button class="btn logout" onclick="logout()">Logout</button>
+</div>
+
+<script>
+
+/* 🔐 Protect Page */
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+  alert("Please login first");
+  window.location.href = "newlog.html";
+}
+
+/* 👤 Show Data */
+document.getElementById("name").innerText = user.displayName;
+document.getElementById("email").innerText = user.email;
+document.getElementById("profilePic").src = user.photoURL;
+
+/* 🚀 Redirect */
+function goDashboard() {
+  window.location.href = "Dashboard.html";
+}
+
+/* 🚪 Logout */
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "newlog.html";
+}
+
+</script>
+
+</body>
+</html>

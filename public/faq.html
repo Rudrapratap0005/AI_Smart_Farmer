@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FAQs - AI Smart Farmer</title>
+  <style>
+    body {
+  font-family: 'Segoe UI';
+  margin: 0;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+}
+
+/* Header */
+header {
+  background: #2e7d32;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+/* Container */
+.faq-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+/* FAQ Box */
+.faq {
+  margin-bottom: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Question */
+.question {
+  width: 100%;
+  text-align: left;
+  padding: 15px;
+  font-size: 16px;
+  border: none;
+  background: #43a047;
+  color: white;
+  cursor: pointer;
+}
+
+/* Answer */
+.answer {
+  max-height: 0;
+  overflow: hidden;
+  background: white;
+  transition: 0.3s ease;
+  padding: 0 15px;
+}
+
+.answer p {
+  margin: 10px 0;
+}
+
+/* Active */
+.faq.active .answer {
+  max-height: 150px;
+  padding: 10px 15px;
+}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌾 AI Smart Farmer - FAQs</h1>
+</header>
+
+<section class="faq-container">
+
+  <h2>Frequently Asked Questions</h2>
+
+  <!-- FAQ ITEM -->
+  <div class="faq">
+    <button class="question">What is AI Smart Farmer?</button>
+    <div class="answer">
+      <p>AI Smart Farmer is a web platform that helps farmers make better decisions using AI, weather data, and analytics.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="question">How does crop recommendation work?</button>
+    <div class="answer">
+      <p>The system analyzes temperature, humidity, and environmental conditions to suggest the most suitable crop.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="question">Is real-time weather data available?</button>
+    <div class="answer">
+      <p>Yes, the platform uses live APIs to provide real-time weather updates for your location.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="question">Can I detect crop diseases?</button>
+    <div class="answer">
+      <p>Yes, you can upload crop images and the system will analyze them to detect possible diseases.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="question">Is this platform free to use?</button>
+    <div class="answer">
+      <p>Yes, this project is free and designed for educational and farmer support purposes.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="question">Does it store my data?</button>
+    <div class="answer">
+      <p>Yes, basic data like crop predictions may be stored to improve future recommendations.</p>
+    </div>
+  </div>
+
+</section>
+
+<script>
+    const faqs = document.querySelectorAll(".faq");
+
+    faqs.forEach(faq => {
+        faq.querySelector(".question").addEventListener("click", () => {
+
+    // Close others (optional)
+        faqs.forEach(item => {
+            if (item !== faq) item.classList.remove("active");
+        });
+
+    // Toggle current
+        faq.classList.toggle("active");
+        });
+    });
+</script>
+
+</body>
+</html>
