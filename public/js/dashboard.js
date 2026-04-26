@@ -338,8 +338,8 @@ async function loadWeather(params) {
   try {
     const data = await fetchWeatherRequest(params);
     renderWeather(data);
-    if (data.meta?.source === "demo") {
-      showToast("Using demo weather data because the OpenWeather key is invalid.", "info");
+    if (data.meta?.source === "open-meteo") {
+      showToast("Using live weather from an alternate provider because the OpenWeather key was rejected.", "info");
     } else {
       showToast("Weather updated.", "success");
     }

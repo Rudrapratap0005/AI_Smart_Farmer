@@ -65,51 +65,107 @@ function buildWeatherAlerts(current, forecastItems = []) {
   return alerts;
 }
 
-function buildDemoWeatherPayload({ city, lat, lon }) {
-  const fallbackName = city || "Farm location";
-  const latitude = Number(lat) || 31.326;
-  const longitude = Number(lon) || 75.5762;
+function describeWeatherCode(code) {
+  const codes = {
+    0: { main: "Clear", description: "clear sky" },
+    1: { main: "Clear", description: "mainly clear" },
+    2: { main: "Clouds", description: "partly cloudy" },
+    3: { main: "Clouds", description: "overcast" },
+    45: { main: "Mist", description: "fog" },
+    48: { main: "Mist", description: "depositing rime fog" },
+    51: { main: "Drizzle", description: "light drizzle" },
+    53: { main: "Drizzle", description: "moderate drizzle" },
+    55: { main: "Drizzle", description: "dense drizzle" },
+    61: { main: "Rain", description: "slight rain" },
+    63: { main: "Rain", description: "moderate rain" },
+    65: { main: "Rain", description: "heavy rain" },
+    71: { main: "Snow", description: "slight snow fall" },
+    73: { main: "Snow", description: "moderate snow fall" },
+    75: { main: "Snow", description: "heavy snow fall" },
+    80: { main: "Rain", description: "rain showers" },
+    81: { main: "Rain", description: "moderate rain showers" },
+    82: { main: "Rain", description: "violent rain showers" },
+    95: { main: "Thunderstorm", description: "thunderstorm" },
+    96: { main: "Thunderstorm", description: "thunderstorm with slight hail" },
+    99: { main: "Thunderstorm", description: "thunderstorm with heavy hail" },
+  };
+
+  return codes[code] || { main: "Clouds", description: "variable conditions" };
+}
+
+async function fetchOpenMeteoWeather({ city, lat, lon }) {
+  let locationName = city || "Farm location";
+  let latitude = Number(lat);
+  let longitude = Number(lon);
+  let countryCode = "IN";
+
+  if ((!latitude || !longitude) && city) {
+    const geocodeResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`);
+    const geocodeData = await geocodeResponse.json();
+    const match = geocodeData.results?.[0];
+
+    if (!geocodeResponse.ok || !match) {
+      throw new Error("Unable to locate that city");
+    }
+
+    latitude = match.latitude;
+    longitude = match.longitude;
+    locationName = match.name || city;
+    countryCode = match.country_code || countryCode;
+  }
+
+  if (!latitude || !longitude) {
+    throw new Error("Latitude and longitude are required");
+  }
+
+  const forecastResponse = await fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,precipitation_probability&forecast_days=2&timezone=auto`
+  );
+  const forecastData = await forecastResponse.json();
+
+  if (!forecastResponse.ok) {
+    throw new Error("Unable to fetch fallback weather");
+  }
+
+  const currentWeather = describeWeatherCode(forecastData.current?.weather_code);
   const current = {
-    name: fallbackName,
+    name: locationName,
     coord: {
       lat: latitude,
       lon: longitude,
     },
     sys: {
-      country: "IN",
+      country: countryCode,
     },
-    weather: [
-      {
-        main: "Clouds",
-        description: "demo forecast data",
-      },
-    ],
+    weather: [currentWeather],
     main: {
-      temp: 29,
-      feels_like: 32,
-      humidity: 64,
+      temp: forecastData.current?.temperature_2m ?? 0,
+      feels_like: forecastData.current?.apparent_temperature ?? forecastData.current?.temperature_2m ?? 0,
+      humidity: forecastData.current?.relative_humidity_2m ?? 0,
     },
     wind: {
-      speed: 4.2,
+      speed: (forecastData.current?.wind_speed_10m ?? 0) / 3.6,
     },
   };
 
-  const forecast = Array.from({ length: 8 }, (_, index) => ({
-    dt: Date.now() + (index + 1) * 10800000,
+  const hourlyTimes = forecastData.hourly?.time || [];
+  const hourlyTemps = forecastData.hourly?.temperature_2m || [];
+  const hourlyHumidity = forecastData.hourly?.relative_humidity_2m || [];
+  const hourlyCodes = forecastData.hourly?.weather_code || [];
+  const hourlyWind = forecastData.hourly?.wind_speed_10m || [];
+  const hourlyPrecip = forecastData.hourly?.precipitation_probability || [];
+
+  const forecast = hourlyTimes.slice(0, 8).map((time, index) => ({
+    dt: new Date(time).getTime(),
     main: {
-      temp: 28 + (index % 3),
-      humidity: 60 + (index % 8),
+      temp: hourlyTemps[index] ?? current.main.temp,
+      humidity: hourlyHumidity[index] ?? current.main.humidity,
     },
-    weather: [
-      {
-        main: index > 4 ? "Rain" : "Clouds",
-        description: index > 4 ? "light rain expected" : "scattered clouds",
-      },
-    ],
+    weather: [describeWeatherCode(hourlyCodes[index])],
     wind: {
-      speed: 4 + index * 0.4,
+      speed: (hourlyWind[index] ?? 0) / 3.6,
     },
-    pop: index > 4 ? 0.58 : 0.18,
+    pop: Math.max(0, Math.min(1, (hourlyPrecip[index] ?? 0) / 100)),
   }));
 
   return {
@@ -117,8 +173,8 @@ function buildDemoWeatherPayload({ city, lat, lon }) {
     forecast,
     alerts: buildWeatherAlerts(current, forecast),
     meta: {
-      source: "demo",
-      fallbackReason: "OpenWeather API key is invalid or inactive.",
+      source: "open-meteo",
+      fallbackReason: "OpenWeather API key was rejected.",
     },
   };
 }
@@ -152,7 +208,8 @@ router.get("/weather", async (req, res, next) => {
 
     if (!currentResponse.ok) {
       if (currentResponse.status === 401) {
-        return res.json(buildDemoWeatherPayload({ city, lat, lon }));
+        const fallbackWeather = await fetchOpenMeteoWeather({ city, lat, lon });
+        return res.json(fallbackWeather);
       }
 
       return res.status(currentResponse.status).json({ message: current.message || "Unable to fetch weather" });
