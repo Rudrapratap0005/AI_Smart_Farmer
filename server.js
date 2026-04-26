@@ -1,8 +1,8 @@
-import dotenv from "dotenv";
 import app from "./src/app.js";
 import { connectToDatabase } from "./src/config/db.js";
+import { loadEnvironment } from "./src/config/env.js";
 
-dotenv.config();
+const loadedEnvFiles = loadEnvironment();
 
 const PORT = Number(process.env.PORT) || 5000;
 const requiredEnvVars = ["JWT_SECRET"];
@@ -10,6 +10,10 @@ const missingEnvVars = requiredEnvVars.filter((key) => !process.env[key]);
 
 if (missingEnvVars.length > 0) {
   throw new Error(`Missing required environment variables: ${missingEnvVars.join(", ")}`);
+}
+
+if (loadedEnvFiles.length === 0) {
+  console.warn("No runtime .env files were found. Expected files like .env or .env.local.");
 }
 
 process.on("unhandledRejection", (error) => {
