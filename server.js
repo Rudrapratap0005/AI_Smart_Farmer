@@ -2,7 +2,7 @@ import app from "./src/app.js";
 import { connectToDatabase } from "./src/config/db.js";
 import { loadEnvironment } from "./src/config/env.js";
 
-const loadedEnvFiles = loadEnvironment();
+const loadedEnvFile = loadEnvironment();
 
 const PORT = Number(process.env.PORT) || 5000;
 const requiredEnvVars = ["JWT_SECRET"];
@@ -12,8 +12,8 @@ if (missingEnvVars.length > 0) {
   throw new Error(`Missing required environment variables: ${missingEnvVars.join(", ")}`);
 }
 
-if (loadedEnvFiles.length === 0) {
-  console.warn("No runtime .env files were found. Expected files like .env or .env.local.");
+if (!loadedEnvFile) {
+  console.warn("No .env file was found.");
 }
 
 process.on("unhandledRejection", (error) => {

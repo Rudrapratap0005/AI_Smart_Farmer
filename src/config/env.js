@@ -4,29 +4,17 @@ import dotenv from "dotenv";
 
 const rootDir = process.cwd();
 
-function resolveEnvFiles() {
-  const nodeEnv = process.env.NODE_ENV?.trim();
-  const candidates = [
-    nodeEnv ? `.env.${nodeEnv}.local` : null,
-    ".env.local",
-    nodeEnv ? `.env.${nodeEnv}` : null,
-    ".env",
-  ].filter(Boolean);
-
-  return candidates
-    .map((fileName) => path.join(rootDir, fileName))
-    .filter((filePath) => fs.existsSync(filePath));
-}
-
 export function loadEnvironment() {
-  const envFiles = resolveEnvFiles();
+  const envFile = path.join(rootDir, ".env");
 
-  envFiles.forEach((filePath) => {
-    dotenv.config({
-      path: filePath,
-      override: false,
-    });
+  if (!fs.existsSync(envFile)) {
+    return null;
+  }
+
+  dotenv.config({
+    path: envFile,
+    override: false,
   });
 
-  return envFiles;
+  return envFile;
 }
