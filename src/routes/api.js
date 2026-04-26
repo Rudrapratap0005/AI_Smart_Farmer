@@ -65,6 +65,64 @@ function buildWeatherAlerts(current, forecastItems = []) {
   return alerts;
 }
 
+function buildDemoWeatherPayload({ city, lat, lon }) {
+  const fallbackName = city || "Farm location";
+  const latitude = Number(lat) || 31.326;
+  const longitude = Number(lon) || 75.5762;
+  const current = {
+    name: fallbackName,
+    coord: {
+      lat: latitude,
+      lon: longitude,
+    },
+    sys: {
+      country: "IN",
+    },
+    weather: [
+      {
+        main: "Clouds",
+        description: "demo forecast data",
+      },
+    ],
+    main: {
+      temp: 29,
+      feels_like: 32,
+      humidity: 64,
+    },
+    wind: {
+      speed: 4.2,
+    },
+  };
+
+  const forecast = Array.from({ length: 8 }, (_, index) => ({
+    dt: Date.now() + (index + 1) * 10800000,
+    main: {
+      temp: 28 + (index % 3),
+      humidity: 60 + (index % 8),
+    },
+    weather: [
+      {
+        main: index > 4 ? "Rain" : "Clouds",
+        description: index > 4 ? "light rain expected" : "scattered clouds",
+      },
+    ],
+    wind: {
+      speed: 4 + index * 0.4,
+    },
+    pop: index > 4 ? 0.58 : 0.18,
+  }));
+
+  return {
+    current,
+    forecast,
+    alerts: buildWeatherAlerts(current, forecast),
+    meta: {
+      source: "demo",
+      fallbackReason: "OpenWeather API key is invalid or inactive.",
+    },
+  };
+}
+
 router.get("/weather", async (req, res, next) => {
   try {
     let apiKey = process.env.OPENWEATHER_API_KEY;
@@ -93,6 +151,10 @@ router.get("/weather", async (req, res, next) => {
     const current = await currentResponse.json();
 
     if (!currentResponse.ok) {
+      if (currentResponse.status === 401) {
+        return res.json(buildDemoWeatherPayload({ city, lat, lon }));
+      }
+
       return res.status(currentResponse.status).json({ message: current.message || "Unable to fetch weather" });
     }
 
@@ -108,6 +170,9 @@ router.get("/weather", async (req, res, next) => {
       current,
       forecast: forecastItems.slice(0, 8),
       alerts,
+      meta: {
+        source: "openweather",
+      },
     });
   } catch (error) {
     return next(error);
