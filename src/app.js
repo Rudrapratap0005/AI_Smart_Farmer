@@ -4,7 +4,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import apiRoutes from "./routes/api.js";
-import { isDatabaseReady } from "./config/db.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -18,25 +17,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(publicDir));
 
-app.use("/api", (req, res, next) => {
-  if (req.path === "/health") {
-    return next();
-  }
-
-  if (!isDatabaseReady()) {
-    return res.status(503).json({
-      message: "Database is not connected yet. Please try again shortly.",
-    });
-  }
-
-  return next();
-});
-
 app.use("/api/auth", authRoutes);
 app.use("/api", apiRoutes);
 
 app.get("/health", (req, res) => {
-  res.json({ status: "ok", database: isDatabaseReady() ? "connected" : "disconnected" });
+  res.json({ status: "ok" });
 });
 
 app.use("/api", (req, res) => {

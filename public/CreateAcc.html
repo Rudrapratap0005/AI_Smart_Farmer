@@ -123,19 +123,25 @@ async function registerUser() {
     return;
   }
 
-  const res = await fetch("/api/auth/register", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ name, email, password })
-  });
+  try {
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ name, email, password })
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (res.ok) {
-    alert("Account created successfully!");
-    window.location.href = "SignIn.html";
-  } else {
+    if (res.ok) {
+      alert("Account created successfully!");
+      window.location.href = "SignIn.html";
+      return;
+    }
+
     alert(data.message || "Error creating account");
+  } catch (error) {
+    console.error(error);
+    alert("Unable to connect to the server. Please make sure the backend is running.");
   }
 }
 </script>

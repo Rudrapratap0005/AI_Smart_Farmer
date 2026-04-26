@@ -62,6 +62,7 @@ header {
 nav {
   display: flex;
   gap: 30px;
+  align-items: center;
 }
 
 /* Anchor Styling */
@@ -85,11 +86,103 @@ nav a:hover {
   border-radius: 8px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile-menu {
+  position: relative;
+}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 8px 14px;
+  border-radius: 999px;
+  margin-top: 0;
+}
+
+.profile-btn:hover {
+  background: rgba(255, 255, 255, 0.26);
+  transform: none;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  font-weight: 700;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 240px;
+  background: white;
+  color: #1b4332;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  padding: 14px;
+  display: none;
+  z-index: 10;
+}
+
+.profile-dropdown.open {
+  display: block;
+}
+
+.profile-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.profile-email {
+  font-size: 13px;
+  color: #5f6f65;
+  margin-bottom: 14px;
+  word-break: break-word;
+}
+
+.dropdown-btn {
+  width: 100%;
+  margin-top: 0;
+  text-align: left;
+}
+
 /* Mobile Responsive */
 @media(max-width: 768px) {
+  header {
+    padding: 18px 20px;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
   nav {
     gap: 15px;
     font-size: 14px;
+    flex-wrap: wrap;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .profile-dropdown {
+    right: auto;
+    left: 0;
   }
 }
 
@@ -193,10 +286,25 @@ input {
     <a href="index.html">Home</a>
     <a href="about.html" target="_self">About Us</a>
     <a href="faq.html" target="_self">FAQs</a>
-    <a href="newlog.html" class="signup" target="_self">Login/Sign Up</a>
   </nav>
 
-  <button id="themeToggle">🌙</button>
+  <div class="header-actions">
+    <div class="profile-menu">
+      <button id="profileButton" class="profile-btn" type="button">
+        <span class="avatar" id="profileAvatar">U</span>
+        <span id="profileLabel">Profile</span>
+      </button>
+
+      <div id="profileDropdown" class="profile-dropdown">
+        <div class="profile-name" id="profileName">User</div>
+        <div class="profile-email" id="profileEmail">user@example.com</div>
+        <button class="dropdown-btn" type="button" onclick="window.location.href='Profile.html'">View Profile</button>
+        <button class="dropdown-btn" type="button" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <button id="themeToggle">🌙</button>
+  </div>
 </header>
 
 <!-- 🧩 DASHBOARD -->
@@ -256,6 +364,49 @@ input {
 
 <!-- JS -->
 <script>
+const token = localStorage.getItem("token");
+const storedUser = localStorage.getItem("user");
+
+if (!token) {
+  alert("Please login first");
+  window.location.href = "SignIn.html";
+}
+
+let currentUser = {};
+
+try {
+  currentUser = storedUser ? JSON.parse(storedUser) : {};
+} catch (error) {
+  currentUser = {};
+}
+
+const profileName = currentUser.name || currentUser.displayName || "Smart Farmer";
+const profileEmail = currentUser.email || "Signed in user";
+const profileInitial = profileName.charAt(0).toUpperCase();
+
+document.getElementById("profileName").textContent = profileName;
+document.getElementById("profileEmail").textContent = profileEmail;
+document.getElementById("profileLabel").textContent = profileName.split(" ")[0];
+document.getElementById("profileAvatar").textContent = profileInitial;
+
+const profileButton = document.getElementById("profileButton");
+const profileDropdown = document.getElementById("profileDropdown");
+
+profileButton.addEventListener("click", () => {
+  profileDropdown.classList.toggle("open");
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".profile-menu")) {
+    profileDropdown.classList.remove("open");
+  }
+});
+
+function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  window.location.href = "SignIn.html";
+}
 
 /* 📍 Detect Location */
 function detectLocation() {

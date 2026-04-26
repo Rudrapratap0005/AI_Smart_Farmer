@@ -1,9 +1,17 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import User from "../../models/User.js";
+import { isDatabaseReady } from "../config/db.js";
+import { readUsers, writeUsers } from "../lib/localStore.js";
 
 const router = express.Router();
+
+function buildToken(userId) {
+  const secret = process.env.JWT_SECRET || "ai-smart-farming-dev-secret";
+  return jwt.sign({ id: userId }, secret, { expiresIn: "7d" });
+}
 
 router.post("/register", async (req, res, next) => {
   try {
@@ -13,18 +21,39 @@ router.post("/register", async (req, res, next) => {
       return res.status(400).json({ message: "Name, email, and password are required" });
     }
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: "User already exists" });
-    }
-
+    const normalizedEmail = email.trim().toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
+    let user;
 
-    const user = await User.create({
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      password: hashedPassword,
-    });
+    if (isDatabaseReady()) {
+      const existingUser = await User.findOne({ email: normalizedEmail });
+      if (existingUser) {
+        return res.status(409).json({ message: "User already exists" });
+      }
+
+      user = await User.create({
+        name: name.trim(),
+        email: normalizedEmail,
+        password: hashedPassword,
+      });
+    } else {
+      const users = await readUsers();
+      const existingUser = users.find((item) => item.email === normalizedEmail);
+
+      if (existingUser) {
+        return res.status(409).json({ message: "User already exists" });
+      }
+
+      user = {
+        _id: crypto.randomUUID(),
+        name: name.trim(),
+        email: normalizedEmail,
+        password: hashedPassword,
+      };
+
+      users.push(user);
+      await writeUsers(users);
+    }
 
     return res.status(201).json({
       message: "User registered successfully",
@@ -47,7 +76,16 @@ router.post("/login", async (req, res, next) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    const user = await User.findOne({ email: email.trim().toLowerCase() });
+    const normalizedEmail = email.trim().toLowerCase();
+    let user = null;
+
+    if (isDatabaseReady()) {
+      user = await User.findOne({ email: normalizedEmail });
+    } else {
+      const users = await readUsers();
+      user = users.find((item) => item.email === normalizedEmail) || null;
+    }
+
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
@@ -57,13 +95,7 @@ router.post("/login", async (req, res, next) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    if (!process.env.JWT_SECRET) {
-      throw new Error("Missing required environment variable: JWT_SECRET");
-    }
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = buildToken(user._id);
 
     return res.json({
       token,

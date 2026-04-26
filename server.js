@@ -5,7 +5,7 @@ import { connectToDatabase } from "./src/config/db.js";
 dotenv.config();
 
 const PORT = Number(process.env.PORT) || 5000;
-const requiredEnvVars = ["MONGO_URI", "JWT_SECRET"];
+const requiredEnvVars = ["JWT_SECRET"];
 const missingEnvVars = requiredEnvVars.filter((key) => !process.env[key]);
 
 if (missingEnvVars.length > 0) {
@@ -21,11 +21,15 @@ const server = app.listen(PORT, () => {
 });
 
 async function connectWithRetry() {
+  if (!process.env.MONGO_URI) {
+    console.warn("MONGO_URI is missing. Running with local JSON storage.");
+    return;
+  }
+
   try {
     await connectToDatabase();
   } catch (error) {
-    console.error("Failed to connect to MongoDB. Retrying in 5 seconds.", error);
-    setTimeout(connectWithRetry, 5000);
+    console.error("Failed to connect to MongoDB. Using local JSON storage for now.", error);
   }
 }
 

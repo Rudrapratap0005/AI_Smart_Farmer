@@ -1,10 +1,13 @@
 import express from "express";
+import crypto from "crypto";
 import Crop from "../../models/CropData.js";
+import { isDatabaseReady } from "../config/db.js";
+import { readPredictions, writePredictions } from "../lib/localStore.js";
 
 const router = express.Router();
 
 router.get("/health", (req, res) => {
-  res.json({ ok: true });
+  res.json({ ok: true, database: isDatabaseReady() ? "connected" : "fallback-local-storage" });
 });
 
 router.post("/predict", async (req, res, next) => {
@@ -24,11 +27,26 @@ router.post("/predict", async (req, res, next) => {
       crop = "Barley";
     }
 
-    const savedPrediction = await Crop.create({
-      temperature,
-      humidity,
-      crop,
-    });
+    let savedPrediction;
+
+    if (isDatabaseReady()) {
+      savedPrediction = await Crop.create({
+        temperature,
+        humidity,
+        crop,
+      });
+    } else {
+      const predictions = await readPredictions();
+      savedPrediction = {
+        _id: crypto.randomUUID(),
+        temperature,
+        humidity,
+        crop,
+        date: new Date().toISOString(),
+      };
+      predictions.unshift(savedPrediction);
+      await writePredictions(predictions.slice(0, 20));
+    }
 
     return res.json({
       crop,
@@ -41,7 +59,14 @@ router.post("/predict", async (req, res, next) => {
 
 router.get("/history", async (req, res, next) => {
   try {
-    const history = await Crop.find().sort({ date: -1 }).limit(20);
+    let history;
+
+    if (isDatabaseReady()) {
+      history = await Crop.find().sort({ date: -1 }).limit(20);
+    } else {
+      history = await readPredictions();
+    }
+
     return res.json(history);
   } catch (error) {
     return next(error);

@@ -232,6 +232,16 @@ body::before {
   const auth = getAuth(app);
 
   window.googleLogin = async function () {
+    if (
+      firebaseConfig.apiKey === "AIzaSy..." ||
+      firebaseConfig.authDomain === "YOUR_AUTH_DOMAIN" ||
+      firebaseConfig.projectId === "YOUR_PROJECT_ID"
+    ) {
+      alert("Google login is not configured yet. Please use Create Account or Sign In.");
+      window.location.href = "SignIn.html";
+      return;
+    }
+
     const provider = new GoogleAuthProvider();
 
     try {
@@ -241,11 +251,12 @@ body::before {
       alert("Welcome " + user.displayName);
 
       localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", user.accessToken || "google-user-session");
 
-      window.location.href = "Dashboard.html";
+      window.location.href = "index.html";
 
     } catch (error) {
-      alert("Login Failed");
+      alert("Google login failed. Please use email sign in for now.");
       console.log(error);
     }
   }
