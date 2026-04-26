@@ -10,6 +10,104 @@ router.get("/health", (req, res) => {
   res.json({ ok: true, database: isDatabaseReady() ? "connected" : "fallback-local-storage" });
 });
 
+function buildWeatherAlerts(current, forecastItems = []) {
+  const alerts = [];
+  const hourlyBlocks = forecastItems.slice(0, 8);
+  const rainChance = hourlyBlocks.some((item) => (item.pop || 0) >= 0.5);
+  const stormRisk = hourlyBlocks.some((item) => {
+    const label = item.weather?.[0]?.main?.toLowerCase() || "";
+    return label.includes("thunderstorm");
+  });
+  const highWind = hourlyBlocks.some((item) => (item.wind?.speed || 0) >= 10);
+  const heatStress = (current.main?.temp || 0) >= 35;
+
+  if (stormRisk) {
+    alerts.push({
+      level: "high",
+      title: "Thunderstorm risk",
+      description: "Field work and spraying should be postponed due to possible thunderstorms.",
+    });
+  }
+
+  if (highWind) {
+    alerts.push({
+      level: "medium",
+      title: "High wind speeds",
+      description: "Protect light structures and postpone delicate irrigation cycles if possible.",
+    });
+  }
+
+  if (rainChance) {
+    alerts.push({
+      level: "medium",
+      title: "Rain expected",
+      description: "Rain is likely in the next few hours. Review drainage and irrigation plans.",
+    });
+  }
+
+  if (heatStress) {
+    alerts.push({
+      level: "medium",
+      title: "Heat stress warning",
+      description: "High temperatures may increase crop water demand during the day.",
+    });
+  }
+
+  if (alerts.length === 0) {
+    alerts.push({
+      level: "low",
+      title: "Conditions stable",
+      description: "No immediate weather-related farm risks were detected from the latest forecast.",
+    });
+  }
+
+  return alerts;
+}
+
+router.get("/weather", async (req, res, next) => {
+  try {
+    const apiKey = process.env.OPENWEATHER_API_KEY;
+    const city = typeof req.query.city === "string" ? req.query.city.trim() : "";
+    const lat = typeof req.query.lat === "string" ? req.query.lat.trim() : "";
+    const lon = typeof req.query.lon === "string" ? req.query.lon.trim() : "";
+
+    if (!apiKey) {
+      return res.status(503).json({ message: "OPENWEATHER_API_KEY is not configured" });
+    }
+
+    if (!city && (!lat || !lon)) {
+      return res.status(400).json({ message: "Provide either a city or latitude and longitude" });
+    }
+
+    const currentUrl = city
+      ? `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`
+      : `https://api.openweathermap.org/data/2.5/weather?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&appid=${apiKey}&units=metric`;
+
+    const currentResponse = await fetch(currentUrl);
+    const current = await currentResponse.json();
+
+    if (!currentResponse.ok) {
+      return res.status(currentResponse.status).json({ message: current.message || "Unable to fetch weather" });
+    }
+
+    const coords = current.coord || {};
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${encodeURIComponent(coords.lat)}&lon=${encodeURIComponent(coords.lon)}&appid=${apiKey}&units=metric`;
+    const forecastResponse = await fetch(forecastUrl);
+    const forecast = await forecastResponse.json();
+
+    const forecastItems = forecastResponse.ok ? (forecast.list || []) : [];
+    const alerts = buildWeatherAlerts(current, forecastItems);
+
+    return res.json({
+      current,
+      forecast: forecastItems.slice(0, 8),
+      alerts,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.post("/predict", async (req, res, next) => {
   try {
     const temperature = Number(req.body.temperature);

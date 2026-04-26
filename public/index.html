@@ -1,511 +1,294 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <title>AI Smart Farmer Platform</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- CSS -->
-  <style>
-
-* {
-  transition: all 0.3s ease;
-}
-body {
-  margin: 0;
-  font-family: 'Segoe UI';
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* 🌄 Background Image with Blur */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background: url("wheat.avif") no-repeat center center/cover;
-
-  filter: blur(3px);
-  opacity: 0.6;
-  z-index: -1;
-}
-
-/* Overlay for better readability */
-body::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background: rgba(0, 0, 0, 0.2);
-  z-index: -1;
-}
-
-/* Header */
-/* Header Layout */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #2e7d32;
-  color: white;
-  padding: 20px 50px;
-}
-
-/* Nav Links */
-nav {
-  display: flex;
-  gap: 30px;
-  align-items: center;
-}
-
-/* Anchor Styling */
-nav a {
-  text-decoration: none;
-  color: white;
-  font-weight: 500;
-  transition: 0.3s;
-}
-
-/* Hover Effect */
-nav a:hover {
-  color: #c8e6c9;
-}
-
-/* Signup Button Style */
-.signup {
-  background: white;
-  color: #2e7d32;
-  padding: 5px 12px;
-  border-radius: 8px;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.profile-menu {
-  position: relative;
-}
-
-.profile-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.18);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  padding: 8px 14px;
-  border-radius: 999px;
-  margin-top: 0;
-}
-
-.profile-btn:hover {
-  background: rgba(255, 255, 255, 0.26);
-  transform: none;
-}
-
-.avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.2);
-  font-weight: 700;
-}
-
-.profile-dropdown {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  width: 240px;
-  background: white;
-  color: #1b4332;
-  border-radius: 16px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
-  padding: 14px;
-  display: none;
-  z-index: 10;
-}
-
-.profile-dropdown.open {
-  display: block;
-}
-
-.profile-name {
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.profile-email {
-  font-size: 13px;
-  color: #5f6f65;
-  margin-bottom: 14px;
-  word-break: break-word;
-}
-
-.dropdown-btn {
-  width: 100%;
-  margin-top: 0;
-  text-align: left;
-}
-
-/* Mobile Responsive */
-@media(max-width: 768px) {
-  header {
-    padding: 18px 20px;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    gap: 15px;
-    font-size: 14px;
-    flex-wrap: wrap;
-  }
-
-  .header-actions {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .profile-dropdown {
-    right: auto;
-    left: 0;
-  }
-}
-
-/* Dashboard Grid */
-.dashboard {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-/* Glass Cards */
-.card {
-  background: rgba(255, 255, 255, 0.9); /* almost solid */
-  backdrop-filter: blur(5px);
-  padding: 20px;
-  border-radius: 15px;
-}
-
-/* Hover Effect */
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-}
-
-/* Buttons */
-button {
-  background: #43a047;
-  color: white;
-  border: none;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background: #2e7d32;
-  transform: scale(1.05);
-}
-
-/* Inputs */
-input {
-  width: 100%;
-  padding: 8px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-/* Analytics */
-.analytics {
-  padding: 20px;
-}
-
-/* Dark Mode */
-.dark {
-  background: #121212;
-  color: white;
-}
-
-.dark .card {
-  background: rgba(0,0,0,0.5);
-}
-
-/* Toast */
-.toast {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #2e7d32;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 10px;
-  animation: fadeInOut 3s;
-}
-
-@keyframes fadeInOut {
-  0% {opacity: 0; transform: translateY(20px);}
-  10% {opacity: 1;}
-  90% {opacity: 1;}
-  100% {opacity: 0; transform: translateY(20px);}
-}
-  </style>
-
-  <!-- Icons -->
-  <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>AI Smart Farmer | Precision Farming SaaS</title>
+  <meta name="description" content="AI Smart Farmer helps growers monitor weather, crop health, soil conditions, and farm analytics from one modern dashboard.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="/css/main.css">
 </head>
+<body class="app-shell">
+  <div class="page-bg">
+    <div class="page-orb orb-one"></div>
+    <div class="page-orb orb-two"></div>
+    <div class="grain"></div>
+  </div>
 
-<body>
-
-<!-- 🔝 HEADER -->
-<header>
-  <h1>🌾 AI Smart Farmer</h1>
-
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html" target="_self">About Us</a>
-    <a href="faq.html" target="_self">FAQs</a>
-  </nav>
-
-  <div class="header-actions">
-    <div class="profile-menu">
-      <button id="profileButton" class="profile-btn" type="button">
-        <span class="avatar" id="profileAvatar">U</span>
-        <span id="profileLabel">Profile</span>
-      </button>
-
-      <div id="profileDropdown" class="profile-dropdown">
-        <div class="profile-name" id="profileName">User</div>
-        <div class="profile-email" id="profileEmail">user@example.com</div>
-        <button class="dropdown-btn" type="button" onclick="window.location.href='Profile.html'">View Profile</button>
-        <button class="dropdown-btn" type="button" onclick="logout()">Logout</button>
-      </div>
+  <header class="site-header">
+    <div class="brand-lockup">
+      <a class="brand" href="/index.html">
+        <span class="brand-mark">AF</span>
+        <span>
+          <strong>AI Smart Farmer</strong>
+          <small>Precision agriculture workspace</small>
+        </span>
+      </a>
     </div>
 
-    <button id="themeToggle">🌙</button>
-  </div>
-</header>
+    <nav class="site-nav" id="siteNav">
+      <a href="#overview">Overview</a>
+      <a href="#operations">Operations</a>
+      <a href="#analytics">Analytics</a>
+      <a href="#future-lab">Future Lab</a>
+    </nav>
 
-<!-- 🧩 DASHBOARD -->
-<section class="dashboard">
+    <div class="topbar-actions">
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle theme">
+        <span class="theme-icon" data-theme-icon>◐</span>
+      </button>
 
-  <!-- 📍 LOCATION -->
-  <div class="card">
-    <h3>📍 Farm Location</h3>
-    <button onclick="detectLocation()">Detect Location</button>
-  </div>
+      <div class="profile-menu">
+        <button id="profileButton" class="profile-btn" type="button" aria-haspopup="true" aria-expanded="false">
+          <span class="avatar avatar-small" id="profileAvatar">AS</span>
+          <span class="profile-meta">
+            <strong id="profileLabel">Farmer</strong>
+            <small id="profileRole">Field owner</small>
+          </span>
+        </button>
 
-  <!-- 🌤 WEATHER -->
-  <div class="card" id="weatherCard">
-    <h3>🌤 Weather</h3>
-    <input type="text" id="cityInput" placeholder="Enter City">
-    <button onclick="checkWeather()">Check Weather</button>
-  </div>
+        <div id="profileDropdown" class="profile-dropdown" role="menu">
+          <div class="profile-dropdown-header">
+            <span class="avatar" id="dropdownAvatar">AS</span>
+            <div>
+              <div class="profile-name" id="profileName">AI Smart Farmer</div>
+              <div class="profile-email" id="profileEmail">farmer@example.com</div>
+            </div>
+          </div>
+          <a class="dropdown-link" href="/pages/profile.html">My Profile</a>
+          <a class="dropdown-link" href="/pages/profile.html#settings">Settings</a>
+          <button class="dropdown-link logout-link" id="logoutButton" type="button">Logout</button>
+        </div>
+      </div>
+    </div>
+  </header>
 
-  <!-- 🤖 AI CROP -->
-  <div class="card">
-    <h3>🌱 AI Crop Recommendation</h3>
-    <button onclick="getRecommendation()">Get Recommendation</button>
-    <p id="result"></p>
-  </div>
+  <main class="page-content">
+    <section class="hero-section glass-panel" id="overview">
+      <div class="hero-copy">
+        <p class="eyebrow">Agriculture Intelligence Cloud</p>
+        <h1>Run your farm like a modern SaaS operation.</h1>
+        <p class="hero-text">
+          Monitor local weather, location context, crop suggestions, soil health, disease signals, and yield trends
+          from one polished workspace built for growers and agribusiness teams.
+        </p>
+        <div class="hero-actions">
+          <button class="primary-btn" id="heroWeatherAction" type="button">Refresh farm weather</button>
+          <a class="secondary-btn" href="/pages/profile.html">Manage profile</a>
+        </div>
+      </div>
 
-  <!-- 🧪 SOIL -->
-  <div class="card">
-    <h3>🧪 Soil Health Tips</h3>
-    <button onclick="checkSoil()">Check Soil</button>
-  </div>
+      <div class="hero-stats">
+        <article class="stat-card">
+          <span class="stat-label">Weather status</span>
+          <strong id="heroWeatherStatus">Ready</strong>
+          <small>Live forecast with risk alerts</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Recommended crop</span>
+          <strong id="heroCropStatus">Pending</strong>
+          <small>Based on humidity and temperature</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Theme preference</span>
+          <strong id="heroThemeStatus">Light</strong>
+          <small>Synced to your device</small>
+        </article>
+      </div>
+    </section>
 
-  <!-- 📷 DISEASE DETECTION -->
-  <div class="card">
-    <h3>📷 Crop Disease Detection</h3>
-    <input type="file" id="imageUpload">
-    <button onclick="analyzeCrop()">Analyze</button>
-  </div>
+    <section class="dashboard-layout" id="operations">
+      <div class="dashboard-main">
+        <article class="glass-panel module-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Location</p>
+              <h2>Farm location intelligence</h2>
+            </div>
+            <button class="ghost-btn" id="detectLocationBtn" type="button">Use my location</button>
+          </div>
+          <div class="module-grid">
+            <div class="result-stack">
+              <div class="result-card">
+                <span class="result-label">Coordinates</span>
+                <strong id="locationCoords">Not detected yet</strong>
+                <small id="locationMeta">Allow geolocation to view your field area on the map.</small>
+              </div>
+              <div class="result-card">
+                <span class="result-label">Field note</span>
+                <strong id="locationInsight">Waiting for GPS</strong>
+                <small>Location data helps tailor weather, irrigation, and crop suggestions.</small>
+              </div>
+            </div>
+            <div id="farmMap" class="map-shell" aria-label="Farm location map"></div>
+          </div>
+        </article>
 
-  <!-- ⚠️ ALERT -->
-  <div class="card">
-    <h3>⚠️ Weather Alert</h3>
-    <button onclick="checkAlert()">Check Alert</button>
-  </div>
+        <article class="glass-panel module-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Weather</p>
+              <h2>Forecast and weather alerts</h2>
+            </div>
+          </div>
+          <form class="inline-form" id="weatherForm">
+            <label class="sr-only" for="cityInput">City</label>
+            <input id="cityInput" name="city" type="text" placeholder="Enter a city or use your farm location">
+            <button class="primary-btn" id="weatherSubmitBtn" type="submit">Check weather</button>
+          </form>
+          <div class="weather-grid" id="weatherResults">
+            <div class="placeholder-card">
+              <strong>Weather data will appear here.</strong>
+              <small>Search by city or use your live location to load current conditions and short-term forecast.</small>
+            </div>
+          </div>
+          <div class="alerts-wrap" id="alertsContainer"></div>
+        </article>
 
-</section>
+        <article class="glass-panel module-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">AI Recommendation</p>
+              <h2>Crop recommendation engine</h2>
+            </div>
+            <button class="ghost-btn" id="recommendBtn" type="button">Generate recommendation</button>
+          </div>
+          <div class="form-split">
+            <label class="field">
+              <span>Temperature (°C)</span>
+              <input id="temperatureInput" type="number" step="0.1" placeholder="Auto-filled from weather">
+            </label>
+            <label class="field">
+              <span>Humidity (%)</span>
+              <input id="humidityInput" type="number" step="0.1" placeholder="Auto-filled from weather">
+            </label>
+          </div>
+          <div id="recommendationResult" class="result-card feature-result">
+            <span class="result-label">Recommendation</span>
+            <strong>Waiting for analysis</strong>
+            <small>We combine weather signals with demo ML logic to suggest resilient crops.</small>
+          </div>
+        </article>
 
-<!-- 📊 ANALYTICS -->
-<section class="analytics">
-  <h2>📊 Farm Yield Analytics</h2>
-  <canvas id="chart"></canvas>
-</section>
+        <article class="glass-panel module-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Soil Intelligence</p>
+              <h2>Soil health and improvement tips</h2>
+            </div>
+          </div>
+          <div class="accordion-list" id="soilTips"></div>
+        </article>
 
-<!-- 📜 FOOTER -->
-<footer>
-  <p>© 2026 AI Smart Farmer | Built with ❤️</p>
-</footer>
+        <article class="glass-panel module-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Disease Detection</p>
+              <h2>Upload a crop image for mock diagnosis</h2>
+            </div>
+          </div>
+          <div class="upload-grid">
+            <label class="upload-box" for="imageUpload">
+              <input id="imageUpload" type="file" accept="image/*" hidden>
+              <span>Choose crop image</span>
+              <small>JPG, PNG, WEBP supported</small>
+            </label>
+            <div class="image-preview-shell">
+              <img id="imagePreview" alt="Crop preview" loading="lazy">
+              <div class="image-preview-placeholder" id="imagePreviewPlaceholder">Image preview will appear here</div>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="primary-btn" id="analyzeCropBtn" type="button">Analyze image</button>
+          </div>
+          <div id="diseaseResult" class="result-card feature-result">
+            <span class="result-label">Detection result</span>
+            <strong>No analysis yet</strong>
+            <small>Mock AI response will summarize disease likelihood and suggested next action.</small>
+          </div>
+        </article>
+      </div>
 
-<!-- JS -->
-<script>
-const token = localStorage.getItem("token");
-const storedUser = localStorage.getItem("user");
+      <aside class="dashboard-side">
+        <article class="glass-panel side-panel">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Alerts</p>
+              <h2>Farm action center</h2>
+            </div>
+            <button class="ghost-btn" id="refreshAlertsBtn" type="button">Refresh</button>
+          </div>
+          <div class="stack-list" id="actionCenter">
+            <div class="mini-panel">
+              <strong>System ready</strong>
+              <small>Weather, crop, soil, and disease modules are standing by.</small>
+            </div>
+          </div>
+        </article>
 
-if (!token) {
-  alert("Please login first");
-  window.location.href = "SignIn.html";
-}
+        <article class="glass-panel side-panel" id="analytics">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Analytics</p>
+              <h2>Monthly crop yield</h2>
+            </div>
+          </div>
+          <canvas id="yieldChart" height="260"></canvas>
+        </article>
 
-let currentUser = {};
+        <article class="glass-panel side-panel">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Prediction History</p>
+              <h2>Recent ML runs</h2>
+            </div>
+          </div>
+          <div class="stack-list" id="historyList">
+            <div class="mini-panel">
+              <strong>No prediction history yet</strong>
+              <small>Run crop recommendations to build a prediction timeline.</small>
+            </div>
+          </div>
+        </article>
+      </aside>
+    </section>
 
-try {
-  currentUser = storedUser ? JSON.parse(storedUser) : {};
-} catch (error) {
-  currentUser = {};
-}
+    <section class="future-grid" id="future-lab">
+      <article class="glass-panel future-card">
+        <p class="eyebrow">Roadmap</p>
+        <h2>AI chatbot for farmers</h2>
+        <p>Reserved module for multilingual advisory conversations, task checklists, and crop guidance.</p>
+      </article>
+      <article class="glass-panel future-card">
+        <p class="eyebrow">Roadmap</p>
+        <h2>Crop disease ML API</h2>
+        <p>Prepared surface for connecting a real image classification service and confidence scoring pipeline.</p>
+      </article>
+      <article class="glass-panel future-card">
+        <p class="eyebrow">Roadmap</p>
+        <h2>Multi-language support</h2>
+        <p>Locale-aware profile preferences and UI slots are ready for Hindi, Tamil, Telugu, and more.</p>
+      </article>
+      <article class="glass-panel future-card">
+        <p class="eyebrow">Roadmap</p>
+        <h2>Subscription plans</h2>
+        <p>Billing-ready product messaging for freemium, pro agronomy, and enterprise cooperative tiers.</p>
+      </article>
+      <article class="glass-panel future-card">
+        <p class="eyebrow">Roadmap</p>
+        <h2>Admin dashboard</h2>
+        <p>Reserved governance space for tenant analytics, support tools, user management, and audit controls.</p>
+      </article>
+    </section>
+  </main>
 
-const profileName = currentUser.name || currentUser.displayName || "Smart Farmer";
-const profileEmail = currentUser.email || "Signed in user";
-const profileInitial = profileName.charAt(0).toUpperCase();
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
 
-document.getElementById("profileName").textContent = profileName;
-document.getElementById("profileEmail").textContent = profileEmail;
-document.getElementById("profileLabel").textContent = profileName.split(" ")[0];
-document.getElementById("profileAvatar").textContent = profileInitial;
-
-const profileButton = document.getElementById("profileButton");
-const profileDropdown = document.getElementById("profileDropdown");
-
-profileButton.addEventListener("click", () => {
-  profileDropdown.classList.toggle("open");
-});
-
-document.addEventListener("click", (event) => {
-  if (!event.target.closest(".profile-menu")) {
-    profileDropdown.classList.remove("open");
-  }
-});
-
-function logout() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
-  window.location.href = "SignIn.html";
-}
-
-/* 📍 Detect Location */
-function detectLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      alert("Latitude: " + pos.coords.latitude + 
-            "\nLongitude: " + pos.coords.longitude);
-    });
-  } else {
-    alert("Geolocation not supported");
-  }
-}
-
-/* 🌦 Weather API */
-async function checkWeather() {
-  const city = document.getElementById("cityInput").value.trim();
-
-  if (!city) {
-    alert("Enter city");
-    return;
-  }
-
-  const apiKey = "df2fd3979295d81967e54a820889b484"; // 👈 replace
-
-  try {
-    const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city},IN&appid=${apiKey}&units=metric`
-    );
-
-    const data = await res.json();
-    console.log(data); // 👈 check this in console
-
-    if (data.cod !== 200) {
-      alert(data.message); // shows real error
-      return;
-    }
-
-    alert(`🌡 Temp: ${data.main.temp}°C\n🌥 ${data.weather[0].description}`);
-
-  } catch (err) {
-    console.log(err);
-    alert("Error fetching weather");
-  }
-}
-
-/* 🌱 Crop Recommendation */
-function getRecommendation() {
-  const crops = ["Rice", "Wheat", "Maize", "Sugarcane"];
-  const random = crops[Math.floor(Math.random() * crops.length)];
-
-  alert("Recommended Crop: " + random);
-}
-
-/* 🌿 Soil Health */
-function checkSoil() {
-  alert("Soil looks healthy ✅ (Demo)");
-}
-
-/* 🦠 Disease Detection */
-function analyzeCrop() {
-  const file = document.querySelector("input[type='file']").files[0];
-
-  if (!file) {
-    alert("Upload image first");
-    return;
-  }
-
-  alert("Analyzing crop... (AI Demo)\nNo disease detected ✅");
-}
-
-/* ⚠️ Weather Alert */
-function checkAlert() {
-  alert("No alerts currently 🌤");
-}
-
-const toggleBtn = document.getElementById("themeToggle");
-
-/* Load saved theme */
-if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark");
-  toggleBtn.textContent = "☀️";
-}
-
-/* Toggle */
-toggleBtn.onclick = () => {
-  document.body.classList.toggle("dark");
-
-  if (document.body.classList.contains("dark")) {
-    localStorage.setItem("theme", "dark");
-    toggleBtn.textContent = "☀️";
-  } else {
-    localStorage.setItem("theme", "light");
-    toggleBtn.textContent = "🌙";
-  }
-};
-
-</script>
-
-
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script type="module" src="/js/dashboard.js"></script>
 </body>
 </html>

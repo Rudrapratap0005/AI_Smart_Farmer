@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | AI Smart Farmer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <div class="page-bg">
+    <div class="page-orb orb-one"></div>
+    <div class="page-orb orb-two"></div>
+    <div class="grain"></div>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="/index.html">
+      <span class="brand-mark">AF</span>
+      <span>
+        <strong>AI Smart Farmer</strong>
+        <small>Account workspace</small>
+      </span>
+    </a>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle theme">
+        <span class="theme-icon" data-theme-icon>◐</span>
+      </button>
+      <a class="secondary-btn" href="/index.html">Back to dashboard</a>
+    </div>
+  </header>
+
+  <main class="profile-layout">
+    <aside class="profile-summary glass-panel">
+      <div class="profile-summary-top">
+        <span class="avatar" id="profilePageAvatar">SF</span>
+        <div>
+          <h2 id="profileNameHeading">Smart Farmer</h2>
+          <p class="muted" id="profileEmailHeading">farmer@example.com</p>
+        </div>
+      </div>
+      <div class="stack-list" style="margin-top: 1.2rem;">
+        <span class="tag" id="profileProvider">Email workspace</span>
+        <div class="mini-panel">
+          <strong>Profile sync</strong>
+          <small>Name, avatar, theme, and locale can be persisted for both local auth and Firebase-backed sessions.</small>
+        </div>
+        <div class="mini-panel">
+          <strong>Future-ready account model</strong>
+          <small>Prepared for subscriptions, team workspaces, admin governance, and multilingual experiences.</small>
+        </div>
+        <button id="logoutProfileBtn" class="secondary-btn" type="button">Logout</button>
+      </div>
+    </aside>
+
+    <section class="settings-card glass-panel" id="settings">
+      <div>
+        <p class="eyebrow">My Profile</p>
+        <h2>Account settings</h2>
+      </div>
+      <div id="profileMessage" class="mini-panel">
+        <strong>Keep your workspace up to date</strong>
+        <small>Upload an image, edit your name, and sync your theme and locale preferences.</small>
+      </div>
+      <form id="profileForm" class="settings-grid">
+        <label class="field">
+          <span>Full name</span>
+          <input id="nameInput" type="text" autocomplete="name" required>
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input id="emailInput" type="email" disabled>
+        </label>
+        <label class="field">
+          <span>Profile image</span>
+          <input id="avatarInput" type="file" accept="image/*">
+        </label>
+        <label class="field">
+          <span>Theme</span>
+          <select id="themeInput">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Language preference</span>
+          <select id="localeInput">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="ta">Tamil</option>
+            <option value="te">Telugu</option>
+          </select>
+        </label>
+        <button id="saveProfileBtn" class="primary-btn" type="submit">Save Changes</button>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="/js/profile.js"></script>
+</body>
+</html>
