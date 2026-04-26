@@ -1,8 +1,6 @@
+import "./src/config/bootstrapEnv.js";
 import app from "./src/app.js";
 import { connectToDatabase } from "./src/config/db.js";
-import { loadEnvironment } from "./src/config/env.js";
-
-const loadedEnvFile = loadEnvironment();
 
 const PORT = Number(process.env.PORT) || 5000;
 const requiredEnvVars = ["JWT_SECRET"];
@@ -12,7 +10,7 @@ if (missingEnvVars.length > 0) {
   throw new Error(`Missing required environment variables: ${missingEnvVars.join(", ")}`);
 }
 
-if (!loadedEnvFile) {
+if (!process.env.JWT_SECRET && !process.env.MONGO_URI && !process.env.OPENWEATHER_API_KEY) {
   console.warn("No .env file was found.");
 }
 

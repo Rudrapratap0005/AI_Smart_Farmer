@@ -2,6 +2,7 @@ import express from "express";
 import crypto from "crypto";
 import Crop from "../../models/CropData.js";
 import { isDatabaseReady } from "../config/db.js";
+import { loadEnvironment } from "../config/env.js";
 import { readPredictions, writePredictions } from "../lib/localStore.js";
 
 const router = express.Router();
@@ -66,10 +67,15 @@ function buildWeatherAlerts(current, forecastItems = []) {
 
 router.get("/weather", async (req, res, next) => {
   try {
-    const apiKey = process.env.OPENWEATHER_API_KEY;
+    let apiKey = process.env.OPENWEATHER_API_KEY;
     const city = typeof req.query.city === "string" ? req.query.city.trim() : "";
     const lat = typeof req.query.lat === "string" ? req.query.lat.trim() : "";
     const lon = typeof req.query.lon === "string" ? req.query.lon.trim() : "";
+
+    if (!apiKey) {
+      loadEnvironment();
+      apiKey = process.env.OPENWEATHER_API_KEY;
+    }
 
     if (!apiKey) {
       return res.status(503).json({ message: "OPENWEATHER_API_KEY is not configured" });
