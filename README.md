@@ -1,13 +1,23 @@
 # 🌾 AI Smart Farmer
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=25&pause=1000&color=2E7D32&center=true&vCenter=true&width=700&lines=AI-Powered+Smart+Farming+Platform;Crop+Prediction+%7C+Weather+Intelligence+%7C+Smart+Recommendations;Built+with+Node.js+%7C+Express.js+%7C+MongoDB" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=25&pause=1000&color=2E7D32&center=true&vCenter=true&width=800&lines=AI-Powered+Smart+Farming+Platform;Crop+Prediction+%7C+Weather+Intelligence+%7CSmart+Recommendations;Built+with+Node.js+%7C+Express.js+%7C+MongoDB" alt="Typing SVG" />
 </p>
 
 <p align="center">
-  <a href="https://github.com/Rudrapratap0005/AI_Smart_Farmer">
-    <img src="https://img.shields.io/badge/GitHub-AI%20Smart%20Farmer-181717?style=for-the-badge&logo=github" />
+  <strong>AI-assisted precision farming platform for smarter agricultural decisions.</strong>
+</p>
+
+<p align="center">
+  <a href="https://ai-smart-farming-y3o7.onrender.com">
+    <img src="https://img.shields.io/badge/🚀%20LIVE%20DEMO-AI%20SMART%20FARMER-46E3B7?style=for-the-badge&logo=render&logoColor=black" />
   </a>
+  <a href="https://github.com/Rudrapratap0005/AI_Smart_Farmer">
+    <img src="https://img.shields.io/badge/GitHub-AI%20Smart%20Farmer-181717?style=for-the-badge&logo=github&logoColor=white" />
+  </a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=node.js&logoColor=white" />
   <img src="https://img.shields.io/badge/Express.js-5.x-000000?style=for-the-badge&logo=express&logoColor=white" />
   <img src="https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
@@ -15,15 +25,39 @@
   <img src="https://img.shields.io/badge/Render-Deployed-46E3B7?style=for-the-badge&logo=render&logoColor=black" />
 </p>
 
+---
+
+## 🌐 Live Deployment
+
 <p align="center">
-  <b>Making agriculture smarter through AI-assisted crop decisions, weather intelligence, and personalized recommendations.</b>
+  <a href="https://ai-smart-farming-y3o7.onrender.com">
+    <img src="https://img.shields.io/badge/🚀%20OPEN%20AI%20SMART%20FARMER-LIVE%20PROJECT-46E3B7?style=for-the-badge&logo=render&logoColor=black" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://ai-smart-farming-y3o7.onrender.com">
+    <strong>https://ai-smart-farming-y3o7.onrender.com</strong>
+  </a>
 </p>
 
 ---
 
-## 🚀 Project Overview
+## ⚡ Technology Stack
 
-**AI Smart Farmer** is a full-stack smart farming platform designed to help farmers make better agricultural decisions using technology.
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=nodejs,express,mongodb,firebase,html,css,js,git,github&perline=9" alt="Technology Stack" />
+</p>
+
+<p align="center">
+  <sub>Node.js • Express.js • MongoDB • Firebase • HTML • CSS • JavaScript • Git • GitHub • Render</sub>
+</p>
+
+---
+
+# 🚀 Project Overview
+
+**AI Smart Farmer** is a full-stack smart farming platform designed to help farmers make better agricultural decisions using modern web technologies and AI-assisted features.
 
 The application combines:
 
@@ -36,26 +70,26 @@ The application combines:
 * ☁️ MongoDB Atlas database
 * 🌐 Cloud deployment
 
-The goal is to provide useful farming information through a simple and responsive web interface.
+The goal is to provide useful farming information through a simple, responsive, and modern web interface.
 
 ---
 
-## ✨ Key Features
+# ✨ Key Features
 
-| Feature                  | Description                                                            |
-| ------------------------ | ---------------------------------------------------------------------- |
-| 🌱 Crop Prediction       | Provides crop-related predictions based on available agricultural data |
-| 🌦️ Weather Intelligence | Retrieves real-time weather information using OpenWeather API          |
-| 🤖 Smart Recommendations | Provides personalized farming-related suggestions                      |
-| 🔐 JWT Authentication    | Secure login and registration using JSON Web Tokens                    |
-| 🔒 Password Security     | Password hashing using bcryptjs                                        |
-| 🔵 Google Sign-In        | Authentication support through Firebase                                |
-| 👤 User Profiles         | Profile management and customization                                   |
-| 📊 Dashboard             | Centralized interface for farming information                          |
-| 🗄️ MongoDB Atlas        | Cloud database for application data                                    |
-| 📁 JSON Fallback         | Local JSON data support when required                                  |
-| 📱 Responsive UI         | Designed to work across different screen sizes                         |
-| 🚀 Deployment            | Application deployment supported through Render                        |
+| Feature                  | Description                                                  |
+| ------------------------ | ------------------------------------------------------------ |
+| 🌱 Crop Prediction       | Provides crop-related predictions based on agricultural data |
+| 🌦️ Weather Intelligence | Retrieves weather information using OpenWeather API          |
+| 🤖 Smart Recommendations | Provides farming-related recommendations                     |
+| 🔐 JWT Authentication    | Secure login and registration using JSON Web Tokens          |
+| 🔒 Password Security     | Password hashing using bcryptjs                              |
+| 🔵 Google Sign-In        | Authentication support through Firebase                      |
+| 👤 User Profiles         | Profile management and customization                         |
+| 📊 Dashboard             | Centralized interface for farming information                |
+| 🗄️ MongoDB Atlas        | Cloud database for application data                          |
+| 📁 JSON Fallback         | Local JSON data support                                      |
+| 📱 Responsive UI         | Designed for different screen sizes                          |
+| 🚀 Deployment            | Deployed using Render                                        |
 
 ---
 
@@ -63,34 +97,34 @@ The goal is to provide useful farming information through a simple and responsiv
 
 ```text
                     ┌─────────────────────────┐
-                    │        User             │
-                    │   Farmer / Visitor      │
+                    │          USER           │
+                    │    Farmer / Visitor     │
                     └────────────┬────────────┘
                                  │
                                  ▼
                     ┌─────────────────────────┐
-                    │     Frontend UI         │
-                    │ HTML • CSS • JavaScript  │
+                    │      FRONTEND UI        │
+                    │  HTML • CSS • JavaScript│
                     └────────────┬────────────┘
                                  │
                                  ▼
                     ┌─────────────────────────┐
-                    │    Express.js Server    │
-                    │       Node.js           │
+                    │    EXPRESS.JS SERVER    │
+                    │        NODE.JS          │
                     └────────────┬────────────┘
                                  │
              ┌───────────────────┼───────────────────┐
              │                   │                   │
              ▼                   ▼                   ▼
-      ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-      │    Auth     │    │ Crop / AI   │    │   Weather   │
-      │ JWT/bcrypt  │    │ Prediction  │    │ OpenWeather │
-      └──────┬──────┘    └──────┬──────┘    └─────────────┘
-             │                  │
-             └──────────┬───────┘
+      ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+      │    AUTH     │     │ CROP / AI   │     │   WEATHER   │
+      │ JWT/bcrypt  │     │ PREDICTION  │     │ OpenWeather │
+      └──────┬──────┘     └──────┬──────┘     └─────────────┘
+             │                   │
+             └──────────┬────────┘
                         ▼
               ┌────────────────────┐
-              │    Data Layer      │
+              │     DATA LAYER     │
               │ MongoDB + JSON     │
               └────────────────────┘
 ```
@@ -124,7 +158,7 @@ Dashboard
 
 # 🔐 Authentication & Security
 
-Authentication is implemented using multiple technologies:
+Authentication is implemented using multiple technologies.
 
 ### JWT Authentication
 
@@ -146,11 +180,11 @@ Middleware Verifies Token
 
 ### Security Technologies
 
-* **JWT** — authentication tokens
-* **bcryptjs** — password hashing
+* **JWT** — Authentication tokens
+* **bcryptjs** — Password hashing
 * **Firebase Authentication** — Google Sign-In
-* **Express middleware** — protected route handling
-* **Environment variables** — sensitive configuration
+* **Express Middleware** — Protected route handling
+* **Environment Variables** — Sensitive configuration
 
 ---
 
@@ -172,13 +206,13 @@ Crop Result
 Recommendation
 ```
 
-The project keeps prediction-related data inside:
+Prediction-related data is maintained inside:
 
 ```text
 data/predictions.json
 ```
 
-The structure can also be extended in the future to integrate a dedicated machine-learning model.
+The architecture can be extended in the future to integrate a dedicated machine-learning model.
 
 ---
 
@@ -200,7 +234,7 @@ Weather Data
 Dashboard
 ```
 
-This can help users consider weather conditions while making farming decisions.
+Weather information can help users consider environmental conditions while making farming decisions.
 
 ---
 
@@ -213,7 +247,7 @@ This can help users consider weather conditions while making farming decisions.
                 FRONTEND UI
                       │
                       ▼
-                EXPRESS API
+                 EXPRESS API
                       │
           ┌───────────┼───────────┐
           ▼           ▼           ▼
@@ -231,10 +265,10 @@ This can help users consider weather conditions while making farming decisions.
 
 # 🛠️ Technology Stack
 
-### Backend
+## Backend
 
-<p>
-<img src="https://skillicons.dev/icons?i=nodejs,express,mongodb" />
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=nodejs,express,mongodb" alt="Backend Technologies" />
 </p>
 
 * Node.js
@@ -245,10 +279,12 @@ This can help users consider weather conditions while making farming decisions.
 * CORS
 * dotenv
 
-### Frontend
+---
 
-<p>
-<img src="https://skillicons.dev/icons?i=html,css,js" />
+## Frontend
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=html,css,js" alt="Frontend Technologies" />
 </p>
 
 * HTML5
@@ -256,10 +292,12 @@ This can help users consider weather conditions while making farming decisions.
 * JavaScript
 * Responsive UI
 
-### Authentication
+---
 
-<p>
-<img src="https://skillicons.dev/icons?i=firebase" />
+## Authentication
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=firebase" alt="Firebase" />
 </p>
 
 * JWT Authentication
@@ -267,18 +305,32 @@ This can help users consider weather conditions while making farming decisions.
 * Google Sign-In
 * bcryptjs
 
-### Database
+---
+
+## Database
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=mongodb" alt="MongoDB" />
+</p>
 
 * MongoDB Atlas
 * Mongoose
 * JSON fallback data
 
-### APIs
+---
+
+## APIs
 
 * OpenWeather API
 * REST API architecture
 
-### Deployment
+---
+
+## Deployment
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=render,mongodb" alt="Deployment Technologies" />
+</p>
 
 * Render
 * MongoDB Atlas
@@ -328,7 +380,7 @@ AI_Smart_Farmer/
 
 # 🧩 Core Modules
 
-### 1. Authentication Module
+## 1. Authentication Module
 
 Handles:
 
@@ -339,7 +391,9 @@ Handles:
 * Protected routes
 * Google authentication
 
-### 2. Crop Prediction Module
+---
+
+## 2. Crop Prediction Module
 
 Handles:
 
@@ -347,7 +401,9 @@ Handles:
 * Prediction processing
 * Agricultural recommendations
 
-### 3. Weather Module
+---
+
+## 3. Weather Module
 
 Handles:
 
@@ -355,7 +411,9 @@ Handles:
 * Weather information
 * Dashboard weather display
 
-### 4. User Module
+---
+
+## 4. User Module
 
 Handles:
 
@@ -363,7 +421,9 @@ Handles:
 * Profiles
 * Personalization
 
-### 5. Database Module
+---
+
+## 5. Database Module
 
 Handles:
 
@@ -372,7 +432,9 @@ Handles:
 * User information
 * Crop information
 
-### 6. Frontend Module
+---
+
+## 6. Frontend Module
 
 Handles:
 
@@ -467,7 +529,7 @@ about.html
 faq.html
 ```
 
-Additional profile and sign-in related pages are also available inside the `public` directory.
+Additional profile and sign-in related pages are available inside the `public` directory.
 
 ---
 
@@ -539,18 +601,29 @@ GitHub Repository
        ↓
      Render
        ↓
-Node.js Server
+ Node.js Server
        ↓
-MongoDB Atlas
+ MongoDB Atlas
        ↓
-Live Application
+ Live Application
 ```
+
+### 🌐 Live Project
+
+**Live URL:**
+https://ai-smart-farming-y3o7.onrender.com
+
+<p align="center">
+  <a href="https://ai-smart-farming-y3o7.onrender.com">
+    <img src="https://img.shields.io/badge/🚀%20LIVE%20PROJECT-OPEN%20AI%20SMART%20FARMER-46E3B7?style=for-the-badge&logo=render&logoColor=black" />
+  </a>
+</p>
 
 ---
 
 # 📈 Project Evolution
 
-### Current
+## Current
 
 * ✅ Full-stack web application
 * ✅ Authentication
@@ -563,7 +636,7 @@ Live Application
 * ✅ MongoDB Atlas
 * ✅ Render deployment
 
-### Future Improvements
+## Future Improvements
 
 * 🔮 Dedicated ML prediction model
 * 📊 Advanced farming analytics
@@ -659,6 +732,15 @@ Smart Farming Ecosystem
 
 ---
 
+# 🌐 Project Links
+
+| Resource             | Link                                                                  |
+| -------------------- | --------------------------------------------------------------------- |
+| 🚀 Live Demo         | [AI Smart Farmer](https://ai-smart-farming-y3o7.onrender.com)         |
+| 💻 GitHub Repository | [AI_Smart_Farmer](https://github.com/Rudrapratap0005/AI_Smart_Farmer) |
+
+---
+
 # 📜 License
 
 This project is licensed under the **ISC License**.
@@ -674,10 +756,12 @@ If you find this project useful:
 🐛 Report issues
 💡 Suggest improvements
 
----
-
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=Rudrapratap0005&repo=AI_Smart_Farmer&label=Repository%20Views&color=brightgreen" />
+</p>
+
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&pause=1000&color=2E7D32&center=true&vCenter=true&width=700&lines=Technology+for+Smarter+Agriculture;AI+%2B+Agriculture+%2B+Innovation;Building+Smarter+Farming+Solutions" alt="Footer Animation" />
 </p>
 
 <p align="center">
